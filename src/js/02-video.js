@@ -1,6 +1,7 @@
 import Player from '@vimeo/player';
 import throttle from 'lodash.throttle';
 
+//https://github.com/CherednikNatalya/goit-js-hw-08
 
 const videoEl = document.querySelector('iframe');
 
