@@ -1,43 +1,44 @@
-// import throttle from 'lodash.throttle';
-// 1. Беремо посилання на форму
+import throttle from 'lodash.throttle';
+// Беремо посилання на форму і інтпути
 const formEl = document.querySelector('.feedback-form')
+const LOCALSTORAGE_KEY = 'feedback-form-state';
 
-// const LOCALSTORAGE_DATA = 'feedback-form-state';
-
-// 2. Виклик ф-ї для внесення даних при перезавантаженні сторінки
-qwe();
-// 3. Створюємо пустий об'єкт, який потім будемо заводити в локалсторадж
+// Виклик ф-ї для внесення даних при перезавантаженні сторінки
+pageInit();
+// Створюємо пустий об'єкт, який потім будемо заводити в локалсторадж
 const formData = {}
-// 4. Вішаємо слухачів на внесення в форму і натиск кнопки сабміт
-formEl.addEventListener('input', onEmailAreaInput);
-formEl.addEventListener('submit', onSumbitClick);
+// Вішаємо слухачів на внесення в форму і натиск кнопки сабміт
+formEl.addEventListener('input', throttle(onFormInput, 500));
+formEl.addEventListener('submit', onSubmitClick);
 
-
-function onEmailAreaInput(evt) {
-    // console.log(evt.target.name)
-    // 5. Вносимо в наш об'єкт дані "evt.target.value" під ключем об'єкта "evt.target.name"
+function onFormInput(evt) {
+    // Вносимо в наш об'єкт дані "evt.target.value" під ключем об'єкта "evt.target.name"
     formData[evt.target.name] = evt.target.value
-    // console.log(formData)
-    // 6. Вносимо в локал сторадж об'єкт "JSON.stringify(formData)" під ключем 'feedback-form-state'
-    localStorage.setItem('feedback-form-state', JSON.stringify(formData))
+    // Вносимо в локал сторадж об'єкт "JSON.stringify(formData)" під ключем 'feedback-form-state'
+    localStorage.setItem(LOCALSTORAGE_KEY, JSON.stringify(formData))
 }
 
-function onSumbitClick(evt) {
+function onSubmitClick(evt) {
+    // Виключаємо дефолтну поведінку
     evt.preventDefault();
     // Очищуємо форму після сабміту
     evt.target.reset();
-    // 7. Виводимо по сабміту в консоль об'єкт з локал страдж черес джейсон.парс
-    console.log(JSON.parse(localStorage.getItem('feedback-form-state')))
+    // Виводимо по сабміту в консоль об'єкт з локал страдж черес джейсон.парс
+    console.log(JSON.parse(localStorage.getItem(LOCALSTORAGE_KEY)))
     // Очищаємо локал сторадж
-    localStorage.removeItem('feedback-form-state')
-    
+    localStorage.removeItem(LOCALSTORAGE_KEY)  
 }
 
-function qwe() {
-    const savedData = JSON.parse(localStorage.getItem('feedback-form-state'))
-    // 9. Перевіряємо чи щось було в локал сторадж перед перезагрузкою сторінки. 
+function pageInit() {
+    const savedData = localStorage.getItem(LOCALSTORAGE_KEY)
+    // Перевіряємо чи щось було в локал сторадж перед перезагрузкою сторінки. 
     if (savedData) {
-        console.log(savedData)
+        try {
+            const parseData = JSON.parse(savedData)
+            formEl.elements.email.value = parseData.email || '';
+            formEl.elements.message.value = parseData.message || '';
+        } catch (error) {
+            console.log(error);
+        }
     }
-    
 }

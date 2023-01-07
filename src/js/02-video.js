@@ -1,7 +1,7 @@
 import Player from '@vimeo/player';
 import throttle from 'lodash.throttle';
 
-//https://github.com/CherednikNatalya/goit-js-hw-08
+
 
 const videoEl = document.querySelector('iframe');
 
@@ -31,3 +31,10 @@ player.setCurrentTime(CurrentTime).then(function(seconds) {
           break;
   }
 });
+
+
+
+
+
+
+//https://github.com/CherednikNatalya/goit-js-hw-08
