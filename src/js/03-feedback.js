@@ -5,8 +5,8 @@ const LOCALSTORAGE_KEY = 'feedback-form-state';
 
 // Виклик ф-ї для внесення даних при перезавантаженні сторінки
 pageInit();
-// Створюємо пустий об'єкт, який потім будемо заводити в локалсторадж
-const formData = {}
+// Створюємо об'єкт, з даними з локалсторадж(якщо вони є) АБО пустий об'єкт, в який будемо вносити дані
+const formData = JSON.parse(localStorage.getItem(LOCALSTORAGE_KEY)) || {};
 // Вішаємо слухачів на внесення в форму і натиск кнопки сабміт
 formEl.addEventListener('input', throttle(onFormInput, 500));
 formEl.addEventListener('submit', onSubmitClick);
